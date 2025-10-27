@@ -21,11 +21,6 @@ Python Version: `3.11`
 ```
 pip install -r requirements.txt
 ```
-### Setup local area network
-1. Download and Install [Rokoko Studio](https://www.rokoko.com/products/studio/download)
-2. Create a scene and connect Rokoko Smart Glove to Rokoko Studio
-3. Enable data streaming, set forward IP to your computer's IP, set data format as `JSONv3`
-4. Configure `data_processing/ip_config.py` set `VR_HOST` to VR headset IP address and `LOCAL_HOST` to your computer's IP
 
 ### Setup hardware
 1. 3D print camera mount.[Camera Mount](https://drive.google.com/file/d/1ipEEMy9oShSyLltYa0Zf3lNU6qnpbdig/view?usp=sharing)
@@ -47,6 +42,14 @@ pip install -r requirements.txt
 5. Deploy APP on Quest 3:
     - Top menu bar->File->Build Settings, select Android, select Quest 3 as device, Click `Build And Run`
 
+### Setup local area network
+1. Download and Install [Rokoko Studio](https://www.rokoko.com/products/studio/download)
+2. Create a scene and connect Rokoko Smart Glove to Rokoko Studio. Each glove should be configured over USB, wired connection, connect the glove to the wifi, disconnect the USB cable and connect the glove to a power bank. Repeat for the second glove.
+3. Add an actor to the scene and link the gloves to the actor.
+4. Enable data streaming, in the right panel, under 'Streaming', the bottom entry with a cube icon is for custom streaming, open the settings for this option and set forward IP to your computer's IP, set data format as `JSONv3`. Click 'Activate'
+5. The Quest 3 headset, laptop and gloves should all be connected to the same wifi network.
+6. Configure `data_processing/ip_config.py` set `VR_HOST` to VR headset IP address and `LOCAL_HOST` to your computer's IP, you can check the IP of the quest by checking the details of the wifi connection in the headset. You should be able to ping the quest headset from the laptop.
+
 ### Start data collection
 #### Collect data
 In `data_processing` folder, `mkdir data`
@@ -58,6 +61,12 @@ python data_collection_server.py # --no_camera if D435 is not connected
 ```
 python data_collection_server.py --handedness left # --no_camera if D435 is not connected
 ```
+Once you run this script, there should be a message in the console saying, 'Initialization complete'
+
+1. Put on the headset and open the ARcap app. The headset does not need to have a wired connection to the laptop.
+2. Enter the IP of your laptop when prompted.
+3. Select between gripper, leap hand and bimanual and follow the onscreen instructions to place the franka arms.
+4. Once the robot position is set, pose data will stream to the laptop and you will see the robot follow your controller position. The green dots should follow your fingertip positions.
 
 All collected data will be stored in `data/<yyyy-mm-dd-hh-mm-ss>`, each trajectory has its own folder named: `data/<yyyy-mm-dd-hh-mm-ss>/<yyyy-mm-dd-hh-mm-ss>`. Each frame is stored as a `.npz`
 
