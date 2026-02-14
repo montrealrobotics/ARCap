@@ -40,6 +40,8 @@ public class CoordinateFrameGripper : MonoBehaviour
     public string ws_ip = "";
     [SerializeField]
     public int sender_port = 12346;
+    [SerializeField]
+    public string robot_arm = "";
     private Socket sender;
     private IPEndPoint targetEndPoint;
     private TextMeshProUGUI init_text;
@@ -48,8 +50,8 @@ public class CoordinateFrameGripper : MonoBehaviour
     void Start()
     {
         frame = GameObject.Find("coordinate");
-        robot = GameObject.Find("panda_link0");
-        robot_ee = GameObject.Find("panda_hand");
+        robot = GameObject.Find("link_base");
+        robot_ee = GameObject.Find("link_eef");
         hand = GameObject.Find("gripper_base");
         cameraRig = GameObject.Find("OVRCameraRig").GetComponent<OVRCameraRig>();
         folder_path = Application.persistentDataPath + "/" + DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss");

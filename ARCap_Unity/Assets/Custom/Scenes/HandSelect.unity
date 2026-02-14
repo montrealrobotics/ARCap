@@ -8955,7 +8955,7 @@ MonoBehaviour:
   pc_ip: 10.5.97.167
   ws_ip: 10.5.114.198
   sender_port: 12346
-  enableBimanual: 1
+  robot_arm: franka
 --- !u!4 &1081351681
 Transform:
   m_ObjectHideFlags: 0
@@ -9641,6 +9641,9 @@ MonoBehaviour:
   overridePerLayerColorScaleAndOffset: 0
   colorScale: {x: 1, y: 1, z: 1, w: 1}
   colorOffset: {x: 0, y: 0, z: 0, w: 0}
+  passthroughLayerResumed:
+    m_PersistentCalls:
+      m_Calls: []
   colorMapEditorType_: 0
   colorMapEditorGradient:
     serializedVersion: 2

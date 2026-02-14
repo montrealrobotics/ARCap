@@ -40,6 +40,8 @@ public class CoordinateFrame : MonoBehaviour
     public string ws_ip = "";
     [SerializeField]
     public int sender_port = 12346;
+    [SerializeField]
+    public string robot_arm = "";
     public static bool isBimanual = false;
     private Socket sender;
     private IPEndPoint targetEndPoint;
@@ -49,8 +51,17 @@ public class CoordinateFrame : MonoBehaviour
     void Start()
     {
         frame = GameObject.Find("coordinate");
-        robot = GameObject.Find("panda_link0");
-        robot_ee = GameObject.Find("panda_grasptarget");
+        if (robot_arm == "xarm")
+        {
+            robot = GameObject.Find("link_base");
+            robot_ee = GameObject.Find("xarm_grasptarget");
+        }
+        else
+        {
+            robot = GameObject.Find("panda_link0");
+            robot_ee = GameObject.Find("panda_grasptarget");
+        }
+
         hand = GameObject.Find("palm_lower");
         cameraRig = GameObject.Find("OVRCameraRig").GetComponent<OVRCameraRig>();
         folder_path = Application.persistentDataPath + "/" + DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss");
@@ -160,11 +171,25 @@ public class CoordinateFrame : MonoBehaviour
             isClicked = false;
             if(isBimanual)
             {
-                SceneManager.LoadScene("GripperSelect");
+                if (robot_arm == "xarm")
+                {
+                    SceneManager.LoadScene("GripperSelect_xarm");
+                }
+                else
+                {
+                    SceneManager.LoadScene("GripperSelect");
+                }
             }
             else
             {
-                SceneManager.LoadScene("HandCollection");
+                if (robot_arm == "xarm")
+                {
+                    SceneManager.LoadScene("HandCollection_xarm");
+                }
+                else
+                {
+                    SceneManager.LoadScene("HandCollection");
+                }
             }
             
         }

@@ -59,6 +59,12 @@ python data_collection_server.py # --no_camera if D435 is not connected
 python data_collection_server.py --handedness left # --no_camera if D435 is not connected
 ```
 
+```
+net stop winnat
+docker-compose up -d  
+net start winnat
+```
+
 All collected data will be stored in `data/<yyyy-mm-dd-hh-mm-ss>`, each trajectory has its own folder named: `data/<yyyy-mm-dd-hh-mm-ss>/<yyyy-mm-dd-hh-mm-ss>`. Each frame is stored as a `.npz`
 
 #### Post-process data to robomimic compatible format

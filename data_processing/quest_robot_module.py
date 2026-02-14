@@ -10,10 +10,11 @@ from rigidbodySento import create_primitive_shape
 
 # For different robot, just write different QuestRightArmLeapModule classes
 class QuestRobotModule:
-    def __init__(self,  vr_ip, local_ip, pose_cmd_port, ik_result_port=None):
+    def __init__(self,  vr_ip, local_ip, pose_cmd_port, ik_result_port=None, debug=False):
         self.vr_ip = vr_ip
         self.local_ip = local_ip
         self.pose_cmd_port = pose_cmd_port
+        self.debug = debug
         # Quest should send WorldFrame as well as wrist pose via UDP
         self.wrist_listener_s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.wrist_listener_s.bind(("", pose_cmd_port))
@@ -25,6 +26,14 @@ class QuestRobotModule:
             self.ik_result_dest = (vr_ip, ik_result_port)
         else:
             self.ik_result_s = None
+        if self.debug:
+            try:
+                rcvbuf = self.wrist_listener_s.getsockopt(socket.SOL_SOCKET, socket.SO_RCVBUF)
+            except Exception:
+                rcvbuf = 'unknown'
+            print(f"[DEBUG][Quest] Wrist listener bound 0.0.0.0:{pose_cmd_port} | SO_RCVBUF={rcvbuf}")
+            if self.ik_result_s is not None:
+                print(f"[DEBUG][Quest] IK result destination {self.ik_result_dest}")
 
     def set_joint_positions(self, robot, joint_positions):
         jid = 0
@@ -96,8 +105,8 @@ class QuestRightArmLeapModule(QuestRobotModule):
 
     right_palm_pos_orn_offset = np.array([-0.1, -0.05, 0.05, 0.0, 0.0, -np.pi/2])
     
-    def __init__(self, vr_ip, local_ip, pose_cmd_port, ik_result_port, vis_sp=None):
-        super().__init__(vr_ip, local_ip, pose_cmd_port, ik_result_port)
+    def __init__(self, vr_ip, local_ip, pose_cmd_port, ik_result_port, vis_sp=None, debug=False):
+        super().__init__(vr_ip, local_ip, pose_cmd_port, ik_result_port, debug=debug)
         self.vis_sp = vis_sp
         # Initialize robots
         self.right_arm = pb.loadURDF("assets/franka_arm/panda_leap.urdf", basePosition=[0.0, 0.0, 0.0], baseOrientation=[0, 0, 0.7071068, 0.7071068], useFixedBase=True)
@@ -160,6 +169,7 @@ class QuestRightArmLeapModule(QuestRobotModule):
 
     # World frame marks beginning of a program.
     def receive(self):
+        print("waiting for quest data")
         data, _ = self.wrist_listener_s.recvfrom(1024)
         data_string = data.decode()
         now = datetime.datetime.now()
@@ -219,7 +229,9 @@ class QuestRightArmLeapModule(QuestRobotModule):
             delta_result = "N"
         msg = f"{delta_result},{right_arm_q[0]:.3f},{right_arm_q[1]:.3f},{right_arm_q[2]:.3f},{right_arm_q[3]:.3f},{right_arm_q[4]:.3f},{right_arm_q[5]:.3f},{right_arm_q[6]:.3f}"
         msg += f",{right_hand_q[0]:.3f},{right_hand_q[1]:.3f},{right_hand_q[2]:.3f},{right_hand_q[3]:.3f},{right_hand_q[4]:.3f},{right_hand_q[5]:.3f},{right_hand_q[6]:.3f},{right_hand_q[7]:.3f},{right_hand_q[8]:.3f},{right_hand_q[9]:.3f},{right_hand_q[10]:.3f},{right_hand_q[11]:.3f},{right_hand_q[12]:.3f},{right_hand_q[13]:.3f},{right_hand_q[14]:.3f},{right_hand_q[15]:.3f}"
-        self.ik_result_s.sendto(msg.encode(), self.ik_result_dest)
+        sent = self.ik_result_s.sendto(msg.encode(), self.ik_result_dest)
+        if self.debug:
+            print(f"[DEBUG][Quest] Sent {sent} bytes to {self.ik_result_dest} (right arm)")
         self.last_arm_q = right_arm_q
         self.last_hand_q = right_hand_q
         return right_hand_q
@@ -246,8 +258,8 @@ class QuestLeftArmGripperModule(QuestRobotModule):
 
     left_palm_pos_orn_offset = np.array([0., 0.0, 0., 0.0, 0.0, np.pi-np.pi/8])
     
-    def __init__(self, vr_ip, local_ip, pose_cmd_port, ik_result_port, vis_sp=None):
-        super().__init__(vr_ip, local_ip, pose_cmd_port, ik_result_port)
+    def __init__(self, vr_ip, local_ip, pose_cmd_port, ik_result_port, vis_sp=None, debug=False):
+        super().__init__(vr_ip, local_ip, pose_cmd_port, ik_result_port, debug=debug)
         self.vis_sp = vis_sp
         # Initialize robots
         self.left_arm = pb.loadURDF("assets/franka_arm/panda_gripper.urdf", basePosition=[0.0, 0.0, 0.0], baseOrientation=[0, 0, 0.7071068, 0.7071068], useFixedBase=True)
@@ -414,7 +426,9 @@ class QuestLeftArmGripperModule(QuestRobotModule):
             delta_result = "N"
         msg = f"{delta_result},{left_arm_q[0]:.3f},{left_arm_q[1]:.3f},{left_arm_q[2]:.3f},{left_arm_q[3]:.3f},{left_arm_q[4]:.3f},{left_arm_q[5]:.3f},{left_arm_q[6]:.3f}"
         msg += f",{hand_q_feedback[0]:.3f},{hand_q_feedback[1]:.3f}"
-        self.ik_result_s.sendto(msg.encode(), self.ik_result_dest)
+        sent = self.ik_result_s.sendto(msg.encode(), self.ik_result_dest)
+        if self.debug:
+            print(f"[DEBUG][Quest] Sent {sent} bytes to {self.ik_result_dest} (left arm)")
         self.last_arm_q = left_arm_q
         self.last_hand_q = left_hand_q
         return action

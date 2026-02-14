@@ -6,6 +6,7 @@ from scipy.spatial.transform import Rotation
 import pybullet as pb
 from rigidbodySento import create_primitive_shape
 from ip_config import *
+import os
 from rokoko_module import RokokoModule
 from realsense_module import DepthCameraModule
 from quest_robot_module import QuestRightArmLeapModule, QuestLeftArmGripperModule
@@ -15,8 +16,9 @@ if __name__ == "__main__":
     parser.add_argument("--frequency", type=int, default=30)
     parser.add_argument("--handedness", type=str, default="right")
     parser.add_argument("--no_camera", action="store_true", default=False)
+    parser.add_argument("--debug", action="store_true", default=False)
     args = parser.parse_args()
-    if not os.path.isdir("data")
+    if not os.path.isdir("data"):
         os.mkdir("data")
     
     c = pb.connect(pb.DIRECT)
@@ -26,17 +28,20 @@ if __name__ == "__main__":
         vis_sp.append(create_primitive_shape(pb, 0.1, pb.GEOM_SPHERE, [0.02], color=c_code[i]))
     if not args.no_camera:
         camera = DepthCameraModule(is_decimate=False, visualize=False)
-    rokoko = RokokoModule(VR_HOST, HAND_INFO_PORT, ROKOKO_PORT)
+    rokoko = RokokoModule(VR_HOST, HAND_INFO_PORT, ROKOKO_PORT, debug=args.debug)
     if args.handedness == "right":
-        quest = QuestRightArmLeapModule(VR_HOST, LOCAL_HOST, POSE_CMD_PORT, IK_RESULT_PORT, vis_sp=None)
+        quest = QuestRightArmLeapModule(VR_HOST, LOCAL_HOST, POSE_CMD_PORT, IK_RESULT_PORT, vis_sp=None, debug=args.debug)
     else:
-        quest = QuestLeftArmGripperModule(VR_HOST, LOCAL_HOST, POSE_CMD_PORT, IK_RESULT_PORT, vis_sp=vis_sp)
+        quest = QuestLeftArmGripperModule(VR_HOST, LOCAL_HOST, POSE_CMD_PORT, IK_RESULT_PORT, vis_sp=vis_sp, debug=args.debug)
 
     start_time = time.time()
     fps_counter = 0
     packet_counter = 0
-    print("Initialization completed")
+    print("Initialization completed")   
+    if args.debug:
+        print(f"[DEBUG] Frequency target: {args.frequency} Hz | Handedness: {args.handedness} | Camera: {not args.no_camera}")
     current_ts = time.time()
+    last_debug_log_t = time.time()
     while True:
         now = time.time()
         # TODO: May cause communication issues, need to tune on AR side.
@@ -47,9 +52,15 @@ if __name__ == "__main__":
         try:
             if not args.no_camera:
                 point_cloud = camera.receive()
+            if args.debug:
+                t0 = time.time()
             left_positions, right_positions = rokoko.receive()
+            if args.debug and time.time() - last_debug_log_t > 1.0:
+                print(f"[DEBUG] Rokoko received: L{left_positions.shape if hasattr(left_positions,'shape') else 'NA'} R{right_positions.shape if hasattr(right_positions,'shape') else 'NA'}")
             rokoko.send_joint_data(np.vstack([left_positions[:5], right_positions[:5]]))
             wrist, head_pose= quest.receive()
+            if args.debug and time.time() - last_debug_log_t > 1.0:
+                print(f"[DEBUG] Quest received wrist/head: wrist={'ok' if wrist is not None else 'none'} head={'ok' if head_pose is not None else 'none'}")
             if wrist is not None:
                 wrist_orn = Rotation.from_quat(wrist[1])
                 wrist_pos = wrist[0]
@@ -62,6 +73,9 @@ if __name__ == "__main__":
                 hand_tip_pose[[0,1,2,3]] = hand_tip_pose[[1,2,3,0]]
                 arm_q, hand_q, wrist_pos, wrist_orn = quest.solve_system_world(wrist_pos, wrist_orn, hand_tip_pose)
                 action = quest.send_ik_result(arm_q, hand_q)
+                if args.debug and time.time() - last_debug_log_t > 1.0:
+                    print(f"[DEBUG] Sent IK result to Quest | arm_q[0:3]={np.array(arm_q[:3]).round(3)} action_info={'len:'+str(len(hand_q))}")
+                    last_debug_log_t = time.time()
                 if quest.data_dir is not None:
                     if args.no_camera:
                         point_cloud = np.zeros((1000,3)) # dummy point cloud
@@ -77,6 +91,8 @@ if __name__ == "__main__":
                                                                                 left_tip_poses=hand_tip_pose, point_cloud=point_cloud)
         except socket.error as e:
             print(e)
+            if args.debug:
+                print("[DEBUG] Socket error encountered in main loop")
             pass
         except KeyboardInterrupt:
             if not args.no_camera:

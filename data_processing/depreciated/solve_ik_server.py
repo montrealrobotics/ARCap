@@ -1,20 +1,23 @@
 import pybullet as pb
 import numpy as np
 from scipy.spatial.transform import Rotation
-from rigidbodySento import create_primitive_shape
+from data_processing.rigidbodySento import create_primitive_shape
 import time
 import sys
+import os
 import socket
-from ip_config import *
+from pathlib import Path
+from data_processing.ip_config import *
 c = pb.connect(pb.GUI)
 
 hand_pos_offset = [0.05, -0.05, 0.1]
 hand_orn_offset = Rotation.from_euler("xyz", [-np.pi,0,0])
 
 palm_orn_offset = Rotation.from_euler("xyz", [0,0,-np.pi/2])
-
-arm = pb.loadURDF("assets/franka_arm/panda.urdf", basePosition=[0.0, 0.0, 0.0], baseOrientation=[0, 0, 0.7071068, 0.7071068], useFixedBase=True)
-hand = pb.loadURDF("assets/leap_hand/robot_pybullet.urdf")
+curr_path = os.getcwd()
+print(Path(curr_path) / Path("data_processing/assets/franka_arm/panda_leap.urdf"))
+arm = pb.loadURDF("data_processing/assets/leap_hand/robot_pybullet.urdf", basePosition=[0.0, 0.0, 0.0], baseOrientation=[0, 0, 0.7071068, 0.7071068], useFixedBase=True)
+hand = pb.loadURDF("data_processing/assets/leap_hand/robot_pybullet.urdf")
 
 
 RIGHT_REST = [0.4,

@@ -80,6 +80,8 @@ public class MainDataRecorderGripper : MonoBehaviour
     [SerializeField]
     public int sender_port = 12346;
     [SerializeField]
+    public string robot_arm = "";
+    [SerializeField]
     public string handedness = "R";
     public static int traj_cnt = 0;
 
@@ -270,10 +272,10 @@ public class MainDataRecorderGripper : MonoBehaviour
         folder_path = CoordinateFrameGripper.folder_path;
         // Visualize coordinate frame pos
 
-        robot = GameObject.Find("panda_link0_vis");
-        robot_ee = GameObject.Find("panda_hand_vis");
+        robot = GameObject.Find("link_base");
+        robot_ee = GameObject.Find("xarm_grasptarget_vis");
         rgripper = GameObject.Find("gripper_base_vis");
-        robot_vis = GameObject.Find("panda_vis");
+        robot_vis = GameObject.Find("xarm6_vis");
         gripper_vis = GameObject.Find("gripper_vis");
         GameObject frame = GameObject.Find("coordinate_vis");
         m_TimeText.text = "Object found";

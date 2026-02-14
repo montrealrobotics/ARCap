@@ -79,6 +79,8 @@ public class MainDataRecorder : MonoBehaviour
     public int listen_port = 65432;
     [SerializeField]
     public int sender_port = 12346;
+    [SerializeField]
+    public string robot_arm = "";
     public static int traj_cnt = 0;
 
     #endregion // Unity Inspector Variables
@@ -259,8 +261,17 @@ public class MainDataRecorder : MonoBehaviour
         // Create a folder with current time
         folder_path = CoordinateFrame.folder_path;
         // Visualize coordinate frame pos
-        robot = GameObject.Find("panda_link0_vis");
-        robot_ee = GameObject.Find("panda_grasptarget_vis");
+        if (robot_arm == "franka")
+        {
+            robot = GameObject.Find("panda_link0_vis");
+            robot_ee = GameObject.Find("panda_grasptarget_vis");
+        }
+        else
+        {
+            robot = GameObject.Find("link_base_vis");
+            robot_ee = GameObject.Find("xarm_grasptarget_vis");
+        }
+
         rleap = GameObject.Find("rpalm_vis");
         GameObject frame = GameObject.Find("coordinate_vis");
         frame.transform.position = CoordinateFrame.last_pos;

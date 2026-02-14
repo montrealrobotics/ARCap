@@ -19,7 +19,8 @@ class RokokoModule:
 
     tip_id = [[4, 8, 12, 16, 20, 5, 6],[3,7,11,15,19],[2,6,10,14,18],[1,5,9,13,17],[0,0,0,0,0]]
     #tip_id = [list(range(21))]
-    def __init__(self,vr_ip, hand_info_port ,listener_port, visualization=False):
+    def __init__(self,vr_ip, hand_info_port ,listener_port, visualization=False, debug=False):
+        self.debug = debug
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_RCVBUF, 0)
         self.sock.bind(("", listener_port))
@@ -28,6 +29,13 @@ class RokokoModule:
         self.tip_vis_dest = (vr_ip, hand_info_port)
         self.visualization = visualization
         self.cnt = 0
+        self._recv_count = 0
+        if self.debug:
+            try:
+                rcvbuf = self.sock.getsockopt(socket.SOL_SOCKET, socket.SO_RCVBUF)
+            except Exception:
+                rcvbuf = 'unknown'
+            print(f"[DEBUG][Rokoko] Listening on 0.0.0.0:{listener_port} | Send dest {vr_ip}:{hand_info_port} | SO_RCVBUF={rcvbuf}")
         if self.visualization:
             pb.connect(pb.GUI)
             self.vis_sp_left = [create_primitive_shape(pb, 0.01, pb.GEOM_SPHERE, (0.01,), collidable=False) for _ in range(21)]
@@ -108,10 +116,22 @@ class RokokoModule:
         msg["rm"] = tip_positions[7].tolist()
         msg["rr"] = tip_positions[8].tolist()
         json_message = json.dumps(self.round_floats(msg))
-        self.tip_vis_sock.sendto(json_message.encode(), self.tip_vis_dest)
+        sent = self.tip_vis_sock.sendto(json_message.encode(), self.tip_vis_dest)
+        if self.debug:
+            print(f"[DEBUG][Rokoko] Sent {sent} bytes to {self.tip_vis_dest}")
 
     def receive(self):
-        data, _ = self.sock.recvfrom(40000)
+        print("waiting for rokoko data")
+        try:
+            data, addr = self.sock.recvfrom(40000)
+        except socket.timeout:
+            if self.debug:
+                print("[DEBUG][Rokoko] recvfrom timeout")
+            raise
+        print("received data")
+        self._recv_count += 1
+        if self.debug and self._recv_count % 30 == 0:
+            print(f"[DEBUG][Rokoko] Received packet #{self._recv_count} from {addr} ({len(data)} bytes)")
         left_positions, right_positions = self.Unpack(data.decode())
         return left_positions, right_positions
     
@@ -126,7 +146,7 @@ class RokokoModule:
 
 if __name__ == "__main__":
     import time
-    rokoko = RokokoModule("10.5.70.193",65432, 14043, visualization=True)
+    rokoko = RokokoModule("192.168.50.178",65432, 14043, visualization=True)
     scale = [1,0.7,0.7,0.7,1,0.7,0.7,0.7,1,0.7,0.7,0.7,1,0.7,0.7,0.7,1,0.7,0.7,0.7]
     cnt = 0
     ts = time.time()
