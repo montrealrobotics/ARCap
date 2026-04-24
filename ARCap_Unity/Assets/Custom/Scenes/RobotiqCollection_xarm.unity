@@ -181,7 +181,7 @@ GameObject:
   - component: {fileID: 25275999}
   - component: {fileID: 25275998}
   m_Layer: 0
-  m_Name: robotiq_85_right_finger_link
+  m_Name: robotiq_85_right_finger_link_vis
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -303,7 +303,7 @@ ArticulationBody:
   m_ImplicitCom: 0
   m_ImplicitTensor: 0
   m_Immovable: 0
-  m_UseGravity: 1
+  m_UseGravity: 0
   m_CollisionDetectionMode: 0
 --- !u!114 &25276001
 MonoBehaviour:
@@ -773,7 +773,7 @@ GameObject:
   - component: {fileID: 140562241}
   - component: {fileID: 140562240}
   m_Layer: 0
-  m_Name: robotiq_85_left_finger_link
+  m_Name: robotiq_85_left_finger_link_vis
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -895,7 +895,7 @@ ArticulationBody:
   m_ImplicitCom: 0
   m_ImplicitTensor: 0
   m_Immovable: 0
-  m_UseGravity: 1
+  m_UseGravity: 0
   m_CollisionDetectionMode: 0
 --- !u!114 &140562243
 MonoBehaviour:
@@ -1290,7 +1290,7 @@ GameObject:
   - component: {fileID: 239367976}
   - component: {fileID: 239367975}
   m_Layer: 0
-  m_Name: robotiq_85_right_knuckle_link
+  m_Name: robotiq_85_right_knuckle_link_vis
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1412,7 +1412,7 @@ ArticulationBody:
   m_ImplicitCom: 0
   m_ImplicitTensor: 0
   m_Immovable: 0
-  m_UseGravity: 1
+  m_UseGravity: 0
   m_CollisionDetectionMode: 0
 --- !u!114 &239367978
 MonoBehaviour:
@@ -1578,7 +1578,7 @@ GameObject:
   - component: {fileID: 262138362}
   - component: {fileID: 262138361}
   m_Layer: 0
-  m_Name: robotiq_85_left_finger_tip_link
+  m_Name: robotiq_85_left_finger_tip_link_vis
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1699,7 +1699,7 @@ ArticulationBody:
   m_ImplicitCom: 0
   m_ImplicitTensor: 0
   m_Immovable: 0
-  m_UseGravity: 1
+  m_UseGravity: 0
   m_CollisionDetectionMode: 0
 --- !u!114 &262138364
 MonoBehaviour:
@@ -2040,7 +2040,7 @@ GameObject:
   - component: {fileID: 396166590}
   - component: {fileID: 396166589}
   m_Layer: 0
-  m_Name: robotiq_85_right_inner_knuckle_link
+  m_Name: robotiq_85_right_inner_knuckle_link_vis
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2161,7 +2161,7 @@ ArticulationBody:
   m_ImplicitCom: 0
   m_ImplicitTensor: 0
   m_Immovable: 0
-  m_UseGravity: 1
+  m_UseGravity: 0
   m_CollisionDetectionMode: 0
 --- !u!114 &396166592
 MonoBehaviour:
@@ -4766,7 +4766,7 @@ GameObject:
   - component: {fileID: 960187482}
   - component: {fileID: 960187481}
   m_Layer: 0
-  m_Name: robotiq_85_left_knuckle_link
+  m_Name: robotiq_85_left_knuckle_link_vis
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4888,7 +4888,7 @@ ArticulationBody:
   m_ImplicitCom: 0
   m_ImplicitTensor: 0
   m_Immovable: 0
-  m_UseGravity: 1
+  m_UseGravity: 0
   m_CollisionDetectionMode: 0
 --- !u!114 &960187484
 MonoBehaviour:
@@ -5588,7 +5588,7 @@ GameObject:
   - component: {fileID: 1104327209}
   - component: {fileID: 1104327208}
   m_Layer: 0
-  m_Name: robotiq_85_base_link
+  m_Name: robotiq_85_base_link_vis
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10203,7 +10203,7 @@ GameObject:
   - component: {fileID: 1788973448}
   - component: {fileID: 1788973447}
   m_Layer: 0
-  m_Name: robotiq_85_right_finger_tip_link
+  m_Name: robotiq_85_right_finger_tip_link_vis
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10324,7 +10324,7 @@ ArticulationBody:
   m_ImplicitCom: 0
   m_ImplicitTensor: 0
   m_Immovable: 0
-  m_UseGravity: 1
+  m_UseGravity: 0
   m_CollisionDetectionMode: 0
 --- !u!114 &1788973450
 MonoBehaviour:
@@ -10349,36 +10349,13 @@ GameObject:
   m_Component:
   - component: {fileID: 1798833573}
   - component: {fileID: 1798833572}
-  - component: {fileID: 1798833571}
   m_Layer: 0
-  m_Name: robotiq_85_gripper
+  m_Name: robotiq_85_gripper_vis
   m_TagString: robot
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1798833571
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1798833570}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d607ea46a579d44c4b19a6322ce4b9b2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  selectedJoint: 
-  selectedIndex: 0
-  control: 0
-  stiffness: 0
-  damping: 0
-  forceLimit: 0
-  speed: 5
-  torque: 100
-  acceleration: 5
-  highLightColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!114 &1798833572
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10786,7 +10763,7 @@ GameObject:
   - component: {fileID: 1906064500}
   - component: {fileID: 1906064499}
   m_Layer: 0
-  m_Name: robotiq_85_left_inner_knuckle_link
+  m_Name: robotiq_85_left_inner_knuckle_link_vis
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10907,7 +10884,7 @@ ArticulationBody:
   m_ImplicitCom: 0
   m_ImplicitTensor: 0
   m_Immovable: 0
-  m_UseGravity: 1
+  m_UseGravity: 0
   m_CollisionDetectionMode: 0
 --- !u!114 &1906064502
 MonoBehaviour:
@@ -12124,22 +12101,14 @@ MonoBehaviour:
   - {fileID: 1392411559}
   - {fileID: 1270471291}
   - {fileID: 1270471291}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 396166587}
+  - {fileID: 1906064497}
+  - {fileID: 239367973}
+  - {fileID: 25275996}
+  - {fileID: 1788973445}
+  - {fileID: 960187479}
+  - {fileID: 140562238}
+  - {fileID: 262138359}
   targetPositions:
   - 0
   - -2.047
@@ -12148,14 +12117,6 @@ MonoBehaviour:
   - 1.39
   - 0
   - 1.198094
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
   - 0
   - 0
   - 0
