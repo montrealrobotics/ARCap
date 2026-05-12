@@ -12,11 +12,15 @@ public class StartScene : MonoBehaviour
     [SerializeField] private TextMeshProUGUI init_text;
     [SerializeField] private Button connectButton;
     [SerializeField] private Button gripperButton;
+    [SerializeField] private Button robotiqButton;
+    [SerializeField] private Button xgripperButton;
     [SerializeField] private Button leapButton;
     [SerializeField] private Button bimanualButton;
     [SerializeField] private Toggle armSelectButton;
 
     private bool isLeapHand = false;
+    private bool isRobotiq = false;
+    private bool isXarmGripper = false;
     private bool isGripper = false;
     private bool isBimanual = false;
     private bool isIpValid = false;
@@ -40,7 +44,16 @@ public class StartScene : MonoBehaviour
 
         // Initialize UI State
         if (connectButton != null) connectButton.interactable = false;
+        if (isXarm)
+        {
+            gripperButton.interactable = false;
+        }
+        else
+        {
+            xgripperButton.interactable = false;
+        }
         
+
         // Load last IP and open keyboard
         string lastIp = PlayerPrefs.GetString(IP_SAVE_KEY, "");
         overlayKeyboard = TouchScreenKeyboard.Open(lastIp, TouchScreenKeyboardType.ASCIICapable);
@@ -58,6 +71,20 @@ public class StartScene : MonoBehaviour
     {
         SetSelection(leap: true);
         init_text.text = "Mode: <color=green>Leap Hand</color> selected.";
+        CheckReadyToConnect();
+    }
+
+    public void SelectRobotiq()
+    {
+        SetSelection(robotiq: true);
+        init_text.text = "Mode: <color=green>Robotiq gripper</color> selected.";
+        CheckReadyToConnect();
+    }
+
+    public void SelectXGripper()
+    {
+        SetSelection(xarmgripper: true);
+        init_text.text = "Mode: <color=green>Xarm gripper</color> selected.";
         CheckReadyToConnect();
     }
 
@@ -88,11 +115,13 @@ public class StartScene : MonoBehaviour
         {
             if (isLeapHand || isBimanual) SceneManagement.LoadScene("HandSelect");
             else if (isGripper) SceneManagement.LoadScene("GripperSelect");
+            else if (isRobotiq) SceneManagement.LoadScene("RobotiqSelect");
         }
         else
         {
             if (isLeapHand || isBimanual) SceneManagement.LoadScene("HandSelect_xarm");
-            else if (isGripper) SceneManagement.LoadScene("GripperSelect_xarm");
+            else if (isXarmGripper) SceneManagement.LoadScene("X_GripperSelect_xarm");
+            else if (isRobotiq) SceneManagement.LoadScene("RobotiqSelect_xarm");
         }
     }
 
@@ -140,10 +169,12 @@ public class StartScene : MonoBehaviour
         isFranka = franka;
     }
 
-    private void SetSelection(bool leap = false, bool gripper = false, bool bimanual = false)
+    private void SetSelection(bool leap = false, bool gripper = false, bool bimanual = false, bool xarmgripper = false, bool robotiq = false)
     {
         isLeapHand = leap;
         isGripper = gripper;
+        isRobotiq = robotiq;
+        isXarmGripper = xarmgripper;
         isBimanual = bimanual;
         CoordinateFrame.isBimanual = bimanual;
     }
