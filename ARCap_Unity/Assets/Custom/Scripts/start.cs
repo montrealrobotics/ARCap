@@ -46,11 +46,13 @@ public class StartScene : MonoBehaviour
         if (connectButton != null) connectButton.interactable = false;
         if (isXarm)
         {
+            xgripperButton.interactable = true;
             gripperButton.interactable = false;
         }
         else
         {
             xgripperButton.interactable = false;
+            gripperButton.interactable = true;
         }
         
 
@@ -127,7 +129,7 @@ public class StartScene : MonoBehaviour
 
     private void CheckReadyToConnect()
     {
-        bool modeSelected = isLeapHand || isGripper || isBimanual;
+        bool modeSelected = isLeapHand || isGripper || isBimanual || isXarmGripper;
         bool armSelected = isFranka || isXarm;
         if (connectButton != null)
         {
@@ -167,6 +169,16 @@ public class StartScene : MonoBehaviour
     {
         isXarm = xarm;
         isFranka = franka;
+        if (isXarm)
+        {
+            xgripperButton.interactable = true;
+            gripperButton.interactable = false;
+        }
+        else
+        {
+            xgripperButton.interactable = false;
+            gripperButton.interactable = true;
+        }
     }
 
     private void SetSelection(bool leap = false, bool gripper = false, bool bimanual = false, bool xarmgripper = false, bool robotiq = false)

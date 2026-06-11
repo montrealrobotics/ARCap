@@ -2336,8 +2336,8 @@ ArticulationBody:
   m_XDrive:
     lowerLimit: 0
     upperLimit: 48.701412
-    stiffness: 0
-    damping: 0
+    stiffness: 500
+    damping: 150
     forceLimit: 50
     target: 0
     targetVelocity: 0
@@ -2484,10 +2484,10 @@ ArticulationBody:
   m_SwingZ: 2
   m_Twist: 1
   m_XDrive:
-    lowerLimit: 0
+    lowerLimit: -49
     upperLimit: 48.701412
-    stiffness: 0
-    damping: 0
+    stiffness: 500
+    damping: 150
     forceLimit: 50
     target: 0
     targetVelocity: 0
@@ -4550,8 +4550,8 @@ ArticulationBody:
   m_AngularDamping: 0.05
   m_JointFriction: 0.05
   m_CenterOfMass: {x: 0.0018497, y: 0.048028, z: -0.00065489}
-  m_InertiaTensor: {x: 0.0002547995, y: 0.00033230722, z: 0.00047109328}
-  m_InertiaRotation: {x: 0.75600624, y: -0.654535, z: 0.0046887808, w: 0.0040594526}
+  m_InertiaTensor: {x: 0.0002547995, y: 0.00033230722, z: 0.00047109326}
+  m_InertiaRotation: {x: 0.75600636, y: -0.65453506, z: 0.004688781, w: 0.004059453}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -4560,7 +4560,7 @@ ArticulationBody:
     m_Bits: 0
   m_ImplicitCom: 0
   m_ImplicitTensor: 0
-  m_Immovable: 0
+  m_Immovable: 1
   m_UseGravity: 1
   m_CollisionDetectionMode: 0
 --- !u!114 &727698844
@@ -4575,7 +4575,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fba5fd74d37a6cf4284698624eb8f6aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  IsBaseLink: 0
+  IsBaseLink: 1
 --- !u!1 &735078852
 GameObject:
   m_ObjectHideFlags: 0
@@ -6362,10 +6362,10 @@ ArticulationBody:
   m_SwingZ: 2
   m_Twist: 1
   m_XDrive:
-    lowerLimit: 0
+    lowerLimit: -49
     upperLimit: 48.701412
-    stiffness: 0
-    damping: 0
+    stiffness: 500
+    damping: 150
     forceLimit: 50
     target: 0
     targetVelocity: 0
@@ -6542,7 +6542,7 @@ MonoBehaviour:
   - {fileID: 779365090}
   - {fileID: 139879754}
   - {fileID: 215495092}
-  - {fileID: 116657161}
+  - {fileID: 380310384}
   - {fileID: 116657161}
   - {fileID: 1387647311}
   - {fileID: 325694932}
@@ -7297,8 +7297,8 @@ ArticulationBody:
   m_XDrive:
     lowerLimit: 0
     upperLimit: 48.701412
-    stiffness: 0
-    damping: 0
+    stiffness: 500
+    damping: 150
     forceLimit: 50
     target: 0
     targetVelocity: 0
@@ -8454,10 +8454,10 @@ ArticulationBody:
   m_SwingZ: 2
   m_Twist: 1
   m_XDrive:
-    lowerLimit: 0
+    lowerLimit: -49
     upperLimit: 48.701412
-    stiffness: 0
-    damping: 0
+    stiffness: 500
+    damping: 150
     forceLimit: 50
     target: 0
     targetVelocity: 0
@@ -8889,7 +8889,7 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3276919676477600166, guid: d58483fbf4155a043b7e7faacbd49f91,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1883148392}
+      addedObject: {fileID: 1883148393}
   m_SourcePrefab: {fileID: 100100000, guid: d58483fbf4155a043b7e7faacbd49f91, type: 3}
 --- !u!1001 &1676119950
 PrefabInstance:
@@ -12358,7 +12358,7 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 1661721786}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1883148392
+--- !u!114 &1883148393
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -12367,15 +12367,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 1883148391}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f86e4aca0627c5044bc263c16aaea0a5, type: 3}
+  m_Script: {fileID: 11500000, guid: 2610f221942ea4a4080560c2f72c661d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_TimeText: {fileID: 534142101}
   local_ip: 10.5.70.193
   listen_port: 65432
   sender_port: 12346
-  robot_arm: franka
-  handedness: L
+  robot_arm: xarm
 --- !u!1 &1884172265
 GameObject:
   m_ObjectHideFlags: 8
@@ -13150,7 +13149,7 @@ Transform:
   m_GameObject: {fileID: 2034663556}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: -0.000000015832484, w: 1}
-  m_LocalPosition: {x: 0.08, y: 0.105, z: 0}
+  m_LocalPosition: {x: 0, y: 0.105, z: 0}
   m_LocalScale: {x: 0.9999999, y: 0.9999999, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -13202,7 +13201,7 @@ ArticulationBody:
   m_Enabled: 1
   serializedVersion: 5
   m_Mass: 0.1
-  m_ParentAnchorPosition: {x: 0.08000002, y: 0.10499998, z: -0.000000029802322}
+  m_ParentAnchorPosition: {x: -0.000000007450581, y: 0.105000004, z: -0.000000029802322}
   m_ParentAnchorRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
   m_AnchorPosition: {x: 0, y: 0, z: 0}
   m_AnchorRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
@@ -13478,10 +13477,10 @@ ArticulationBody:
   m_SwingZ: 2
   m_Twist: 1
   m_XDrive:
-    lowerLimit: 0
+    lowerLimit: -49
     upperLimit: 48.701412
-    stiffness: 0
-    damping: 0
+    stiffness: 500
+    damping: 150
     forceLimit: 50
     target: 0
     targetVelocity: 0
