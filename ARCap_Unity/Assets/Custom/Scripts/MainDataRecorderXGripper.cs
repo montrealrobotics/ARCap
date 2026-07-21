@@ -116,23 +116,19 @@ public class MainDataRecorderXGripper : MonoBehaviour
             // Should use left eye anchor pose from OVRCameraRig
         var headPose = cameraRig.centerEyeAnchor.position;
         var headRot = cameraRig.centerEyeAnchor.rotation; // Should store them separately. [w,x,y,z]
-        m_TimeText.text = "here1";
         m_TimeText.enabled = true;
         if (client.Available > 0)
         {
-            m_TimeText.text = "client";
             hand = GetMessage();
         }
-        m_TimeText.text = "here2";
+
         // Left controller on right hand, inversed
         Vector3 rightWristPos = cameraRig.leftHandAnchor.position + cameraRig.leftHandAnchor.rotation * left_pos_offset;
         Vector3 leftWristPos = cameraRig.rightHandAnchor.position + cameraRig.rightHandAnchor.rotation * right_pos_offset;
         Quaternion rightWristRot = cameraRig.leftHandAnchor.rotation * rotateXinv * rotateZXinv;
         Quaternion leftWristRot = cameraRig.rightHandAnchor.rotation * rotateX * rotateZX;
-        m_TimeText.text = "here3";
         updateVisSpheres(hand, leftWristPos, leftWristRot, rightWristPos, rightWristRot);
         // if time gap > 0.05 send hand pose
-        m_TimeText.text = "here";
         if (Time.time - current_time > 0.02)
         {
             if(startRecording)
@@ -153,10 +149,10 @@ public class MainDataRecorderXGripper : MonoBehaviour
             //             rightWristPos, rightWristRot,
             //             hand, current_time);
         }
-        // else
-        // {
-        //     # m_TimeText.text = "Not recording";
-        // }
+        else
+        {
+            m_TimeText.text = "Not recording";
+        }
         return true;
     }
 
@@ -179,7 +175,6 @@ public class MainDataRecorderXGripper : MonoBehaviour
             byte[] receivedBytes = client.Receive(ref remoteEndPoint);
             message = Encoding.UTF8.GetString(receivedBytes);
             rokokoHand = JsonUtility.FromJson<RokokoHand>(message);
-            //m_TimeText.text = "Received: " + rokokoHand.lt[2].ToString();
         }
         catch (Exception e)
         {
@@ -230,7 +225,7 @@ public class MainDataRecorderXGripper : MonoBehaviour
 
         if (!TryGetComponents())
         {
-            m_TimeText.text = "mising components";
+            m_TimeText.text = "Missing components";
             enabled = false;
         }
         // set up socket
@@ -273,13 +268,11 @@ public class MainDataRecorderXGripper : MonoBehaviour
         GameObject frame = GameObject.Find("coordinate_vis");
         frame.transform.position = CoordinateFrameXGripper.last_pos;
         frame.transform.rotation = CoordinateFrameXGripper.last_rot;
-        m_TimeText.text = "Socket " + frame.transform.position;
         robot.GetComponent<ArticulationBody>().TeleportRoot(CoordinateFrameXGripper.last_pos, CoordinateFrameXGripper.last_rot);
         
         // Create sender socket
         sender = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
         targetEndPoint = new IPEndPoint(IPAddress.Parse(CoordinateFrameXGripper.remote_ip), sender_port);
-        m_TimeText.text = "bfore rokoko ";
         // Initialize hand 
         hand = new RokokoHand();
         hand.lt = new float[3]{0.0f, 0.0f, 0.0f};
@@ -291,7 +284,6 @@ public class MainDataRecorderXGripper : MonoBehaviour
         image_r = GameObject.Find("panel_u").GetComponent<Image>();
         image_l = GameObject.Find("panel_l").GetComponent<Image>();
         image_b = GameObject.Find("panel_b").GetComponent<Image>();
-        m_TimeText.text = "end rokoko ";
     }
 
     /// <summary>
@@ -299,7 +291,6 @@ public class MainDataRecorderXGripper : MonoBehaviour
     /// </summary>
     protected void Update()
     {
-        m_TimeText.text = "update? ";
         // Attempt to show the render textures
         MainLoop();
         if (OVRInput.GetUp(OVRInput.RawButton.A))

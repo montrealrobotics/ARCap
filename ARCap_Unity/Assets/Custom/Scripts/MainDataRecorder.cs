@@ -178,7 +178,6 @@ public class MainDataRecorder : MonoBehaviour
             byte[] receivedBytes = client.Receive(ref remoteEndPoint);
             message = Encoding.UTF8.GetString(receivedBytes);
             rokokoHand = JsonUtility.FromJson<RokokoHand>(message);
-            //m_TimeText.text = "Received: " + rokokoHand.lt[2].ToString();
         }
         catch (Exception e)
         {
@@ -232,7 +231,7 @@ public class MainDataRecorder : MonoBehaviour
 
         if (!TryGetComponents())
         {
-            m_TimeText.text = "mising components";
+            m_TimeText.text = "Missing components";
             enabled = false;
         }
         // set up socket

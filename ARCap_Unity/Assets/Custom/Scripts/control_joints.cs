@@ -69,7 +69,6 @@ public class JointController : MonoBehaviour
         jointCommands = new List<float>();
         byte[] data = client.Receive(ref remoteEndPoint);
         string[] commands = System.Text.Encoding.UTF8.GetString(data).Split(','); // A string separated by commas
-        m_Text.text = "command" + commands[0];
         if (commands[0].Equals("N") && data_collector && image_r.enabled)
         {
             image_r.color = new Color32(188, 188, 13, 200);
@@ -110,7 +109,6 @@ public class JointController : MonoBehaviour
         UdpReceiveResult result = await client.ReceiveAsync();
         byte[] data = result.Buffer;
         string[] commands = System.Text.Encoding.UTF8.GetString(data).Split(','); // A string separated by commas
-        m_Text.text = "command" + commands[0];
         if (commands[0].Equals("N") && data_collector && image_r.enabled)
         {
             image_r.color = new Color32(188, 188, 13, 200);

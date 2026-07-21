@@ -105,7 +105,6 @@ public class CoordinateFrameXGripper : MonoBehaviour
         hand.transform.rotation = robot_ee.transform.rotation * hand_rot_offset;
         if (OVRInput.GetUp(OVRInput.RawButton.Y))
         {
-            init_text.text = "correct coord!!!!";
             isFreezeUpdate = !isFreezeUpdate;
             if(isFreezeUpdate)
             {
