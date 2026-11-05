@@ -43,6 +43,8 @@ public class CoordinateFrame : MonoBehaviour
     [SerializeField]
     public string robot_arm = "";
     public static bool isBimanual = false;
+    // This scene's name, so the recording scene can come back here to place the robot again (Y there)
+    public static string placement_scene;
     private Socket sender;
     private IPEndPoint targetEndPoint;
     private TextMeshProUGUI init_text;
@@ -50,6 +52,7 @@ public class CoordinateFrame : MonoBehaviour
     private bool data_collection_mode = true;
     void Start()
     {
+        placement_scene = SceneManager.GetActiveScene().name;
         frame = GameObject.Find("coordinate");
         if (robot_arm == "xarm")
         {

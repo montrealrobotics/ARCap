@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.XR;
 using UnityEngine.Rendering;
+using UnityEngine.SceneManagement;
 using Unity.XR.Oculus;
 using Meta.XR.Depth;
 using TMPro;
@@ -154,7 +155,7 @@ public class MainDataRecorder : MonoBehaviour
         }
         else
         {
-            m_TimeText.text = "Not recording";
+            m_TimeText.text = "Not recording (Y: place robot again)";
         }
         return true;
     }
@@ -356,6 +357,13 @@ public class MainDataRecorder : MonoBehaviour
             image_r.enabled = !image_r.enabled;
             image_u.enabled = !image_u.enabled;
         }
+        // Y: back to the placement scene; the robot follows the left controller again and X there sends
+        // the new world frame (the teleop starts a new data folder for it)
+        if (OVRInput.GetUp(OVRInput.RawButton.Y) && !startRecording && !string.IsNullOrEmpty(CoordinateFrame.placement_scene))
+        {
+            SceneManager.LoadScene(CoordinateFrame.placement_scene);
+            return;
+        }
         if (!startRecording)
         {
             if (startRemoving)
@@ -372,6 +380,19 @@ public class MainDataRecorder : MonoBehaviour
             }
         }
         
+    }
+
+    // Free the listening port, so this scene can open it again after placing the robot again
+    protected void OnDestroy()
+    {
+        if (client != null)
+        {
+            client.Close();
+        }
+        if (sender != null)
+        {
+            sender.Close();
+        }
     }
 
     protected void OnApplicationQuit()

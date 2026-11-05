@@ -56,7 +56,23 @@ public class StartScene : MonoBehaviour
         }
         
 
-        // Load last IP and open keyboard
+        // Use the last IP if there is one; the keyboard only opens without one, or from the Change IP button
+        string lastIp = PlayerPrefs.GetString(IP_SAVE_KEY, "");
+        if (IsValidIP(lastIp))
+        {
+            pc_ip = lastIp;
+            isIpValid = true;
+            init_text.text = $"PC IP: {lastIp}\nSelect a Mode below, or press Change IP.";
+        }
+        else
+        {
+            OpenIpKeyboard();
+        }
+    }
+
+    // Also the Change IP button's On Click
+    public void OpenIpKeyboard()
+    {
         string lastIp = PlayerPrefs.GetString(IP_SAVE_KEY, "");
         overlayKeyboard = TouchScreenKeyboard.Open(lastIp, TouchScreenKeyboardType.ASCIICapable);
         init_text.text = string.IsNullOrEmpty(lastIp) ? "Enter PC IP..." : $"Saved IP: {lastIp}\nEdit or confirm on keyboard to continue.";
@@ -146,11 +162,20 @@ public class StartScene : MonoBehaviour
 
     void Update()
     {
-        if (overlayKeyboard != null && overlayKeyboard.status == TouchScreenKeyboard.Status.Done)
+        if (overlayKeyboard != null && (overlayKeyboard.status == TouchScreenKeyboard.Status.Done ||
+                                        overlayKeyboard.status == TouchScreenKeyboard.Status.Canceled))
         {
-            if (IsValidIP(overlayKeyboard.text))
+            TouchScreenKeyboard keyboard = overlayKeyboard;
+            overlayKeyboard = null;  // handle each keyboard once
+            if (keyboard.status == TouchScreenKeyboard.Status.Canceled)
             {
-                pc_ip = overlayKeyboard.text;
+                // Closed without confirming: keep the IP from before, if there is one
+                init_text.text = isIpValid ? $"PC IP: {pc_ip}\nSelect a Mode below, or press Change IP."
+                                           : "<color=red>No IP entered.</color> Press Change IP to enter it.";
+            }
+            else if (IsValidIP(keyboard.text))
+            {
+                pc_ip = keyboard.text;
                 isIpValid = true;
                 PlayerPrefs.SetString(IP_SAVE_KEY, pc_ip);
                 PlayerPrefs.Save();
@@ -160,7 +185,7 @@ public class StartScene : MonoBehaviour
             else
             {
                 isIpValid = false;
-                init_text.text = "<color=red>Invalid IP!</color> Click screen to re-open keyboard.";
+                init_text.text = "<color=red>Invalid IP!</color> Press Change IP to try again.";
                 if (connectButton != null) connectButton.interactable = false;
             }
         }
